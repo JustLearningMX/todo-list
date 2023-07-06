@@ -9,6 +9,7 @@ import me.hiramchavez.todolist.mapper.UserMapper;
 import me.hiramchavez.todolist.model.User;
 import me.hiramchavez.todolist.repository.UserRepository;
 import me.hiramchavez.todolist.security.PasswordUtils;
+import me.hiramchavez.todolist.security.TokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
     public UserSignedUpDto signUp(UserToSignUpDto userToSignUpDto) {
         // Obtener la contraseña en texto plano
@@ -68,13 +70,14 @@ public class UserService {
 
         // Autenticar al usuario
         User usuarioAutenticado = (User) authenticationManager.authenticate(authCredentials).getPrincipal();
+        String token = tokenService.generateToken(usuarioAutenticado);
 
         return new LoggedUserDto(
           usuarioAutenticado.getId(),
           usuarioAutenticado.getFirstName(),
           usuarioAutenticado.getLastName(),
           usuarioAutenticado.getEmail(),
-          "this_is_my_example_token_for_user_" + usuarioAutenticado.getEmail()
+          token
         );
     }
 }
