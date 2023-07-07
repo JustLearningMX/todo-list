@@ -26,16 +26,10 @@ public class SecurityFilter extends OncePerRequestFilter {
       HttpServletResponse response,
       FilterChain filterChain
     ) throws ServletException, IOException {
-        //Get authHeader from header
-        String authHeader = request.getHeader("Authorization");
 
-        //Cuando la peticion desde JS viene con el header Authorization, pero con el valor "null"
-        if (authHeader != null && authHeader.equals("null"))
-            authHeader = null;
+        String token = tokenService.getTokenFromHeader(request);
 
-        //Validar que el authHeader no sea nulo o vacío
-        if (authHeader != null) {
-            String token = authHeader.replace("Bearer ", "");
+        if (token != null) {
 
             String subject = tokenService.getSubject(token);
 
@@ -56,4 +50,5 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
 }

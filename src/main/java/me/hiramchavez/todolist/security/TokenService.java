@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.servlet.http.HttpServletRequest;
 import me.hiramchavez.todolist.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,21 @@ public class TokenService {
             throw new RuntimeException("Token JWT inválido o expirado!");
 
         return verifier.getSubject();
+    }
+
+    public String getTokenFromHeader(HttpServletRequest request) {
+        //Get authHeader from header
+        String authHeader = request.getHeader("Authorization");
+
+        //Cuando la peticion desde JS viene con el header Authorization, pero con el valor "null"
+        if (authHeader != null && authHeader.equals("null"))
+            authHeader = null;
+
+        //Validar que el authHeader no sea nulo o vacío
+        if (authHeader != null)
+            return authHeader.replace("Bearer ", ""); //token'
+
+        return null;
     }
 
     private Instant getExpirationTime() {

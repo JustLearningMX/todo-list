@@ -1,5 +1,6 @@
 package me.hiramchavez.todolist.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +39,11 @@ public class UserController {
           .body(userSignedUpDto);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserSignedUpDto> getUser(@PathVariable Long id) {
+    @GetMapping()
+    public ResponseEntity<UserSignedUpDto> getUser(HttpServletRequest request) {
         return ResponseEntity
           .status(HttpStatus.OK)
-          .body(userService.getUser(id));
+          .body(userService.getUser(request));
     }
 
     @PostMapping("/login")

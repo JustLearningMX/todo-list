@@ -1,5 +1,6 @@
 package me.hiramchavez.todolist.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import me.hiramchavez.todolist.dto.LoggedUserDto;
 import me.hiramchavez.todolist.dto.UserSignedUpDto;
@@ -43,8 +44,10 @@ public class UserService {
         return userMapper.userToUserSignedUpDto(user);
     }
 
-    public UserSignedUpDto getUser(Long id) {
-        User user = userRepository.getReferenceById(id);
+    public UserSignedUpDto getUser(HttpServletRequest request) {
+        String userEmail = tokenService.getSubject(tokenService.getTokenFromHeader(request));
+
+        User user = (User) userRepository.findByEmailAndActiveTrue(userEmail);
         return userMapper.userToUserSignedUpDto(user);
     }
 
