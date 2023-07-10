@@ -31,7 +31,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
 
-            String subject = tokenService.getSubject(token);
+            String subject = tokenService.getVerifier(token).getSubject();
 
             if (subject != null) {
                 //Buscar usuario en BD

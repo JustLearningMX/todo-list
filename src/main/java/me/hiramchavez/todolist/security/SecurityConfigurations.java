@@ -1,6 +1,7 @@
 package me.hiramchavez.todolist.security;
 
 import lombok.RequiredArgsConstructor;
+import me.hiramchavez.todolist.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,10 @@ public class SecurityConfigurations {
                 .permitAll()
               .requestMatchers(HttpMethod.POST, "/users/login")
                 .permitAll()
+              .requestMatchers(HttpMethod.GET, "/users/{id}")
+                .hasAuthority(Role.ADMIN.name())
+              .requestMatchers(HttpMethod.GET, "/users")
+                .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
               .anyRequest()
                 .authenticated()
         )

@@ -30,6 +30,7 @@ public class TokenService {
               .withIssuer(apiIssuer)
               .withSubject(user.getEmail())
               .withClaim("id", user.getId())
+              .withClaim("ROLE", user.getRole().name())
               .withExpiresAt(getExpirationTime())
               .sign(algorithm);
         } catch (Exception e) {
@@ -38,7 +39,7 @@ public class TokenService {
         }
     }
 
-    public String getSubject(String token) {
+    public DecodedJWT getVerifier(String token) {
 
         if (token == null || token.isEmpty())
             throw new RuntimeException("No hay un token presente!");
@@ -62,7 +63,7 @@ public class TokenService {
         if (verifier.getSubject() == null)
             throw new RuntimeException("Token JWT inválido o expirado!");
 
-        return verifier.getSubject();
+        return verifier;
     }
 
     public String getTokenFromHeader(HttpServletRequest request) {

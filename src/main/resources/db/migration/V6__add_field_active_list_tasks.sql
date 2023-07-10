@@ -1,0 +1,1 @@
+ALTER table list_tasks ADD COLUMN active boolean NOT NULL DEFAULT true;

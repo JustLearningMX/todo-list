@@ -44,10 +44,18 @@ public class UserService {
         return userMapper.userToUserSignedUpDto(user);
     }
 
+    //Get user by token
     public UserSignedUpDto getUser(HttpServletRequest request) {
-        String userEmail = tokenService.getSubject(tokenService.getTokenFromHeader(request));
+        String token = tokenService.getTokenFromHeader(request);
+        String userEmail = tokenService.getVerifier(token).getSubject();
 
         User user = (User) userRepository.findByEmailAndActiveTrue(userEmail);
+        return userMapper.userToUserSignedUpDto(user);
+    }
+
+    //Allow an Admin get data of another user
+    public UserSignedUpDto getUser(Long id, HttpServletRequest request) {
+        User user = userRepository.getReferenceById(id);
         return userMapper.userToUserSignedUpDto(user);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,9 +30,15 @@ public class User implements UserDetails {
     private String password;
     private Boolean active;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ListTasks> listTasks = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -57,5 +64,25 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    //set up bidirectional relationship with ListTasks class
+    public void addListTasks(ListTasks listTasks) {
+        this.listTasks.add(listTasks);
+        listTasks.setUser(this);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+          "id=" + id +
+          ", firstName='" + firstName + '\'' +
+          ", lastName='" + lastName + '\'' +
+          ", email='" + email + '\'' +
+          ", password='" + password + '\'' +
+          ", active=" + active +
+          ", role=" + role +
+//          ", listTasks=" + listTasks +
+          '}';
     }
 }

@@ -46,6 +46,13 @@ public class UserController {
           .body(userService.getUser(request));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserSignedUpDto> getUser(@PathVariable Long id, HttpServletRequest request) {
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.getUser(id, request));
+    }
+
     @PostMapping("/login")
     @Transactional
     public ResponseEntity<LoggedUserDto> login(@RequestBody @Valid UserToLoginDto userToLoginDto) {
