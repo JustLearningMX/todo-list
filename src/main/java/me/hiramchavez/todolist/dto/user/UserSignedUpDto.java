@@ -1,4 +1,6 @@
-package me.hiramchavez.todolist.dto;
+package me.hiramchavez.todolist.dto.user;
+
+import me.hiramchavez.todolist.dto.listTasks.ListTasksResDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,8 +14,8 @@ public record UserSignedUpDto(
       String lastName,
       String email,
       Boolean active,
-      String role,
-      List<ListTasksResDto> listTasks
+      String role
+//      List<ListTasksResDto> listTasks
 
 ) implements Serializable {
 }

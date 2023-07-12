@@ -33,6 +33,18 @@ public class ListTasks {
     @OneToMany(mappedBy = "listTasks", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
+    //set up bidirectional relationship with Task class
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        task.setListTasks(this);
+    }
+
+    //clean the list of tasks
+    public ListTasks cleanTasks() {
+        this.tasks.clear();
+        return this;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

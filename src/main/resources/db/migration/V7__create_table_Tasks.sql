@@ -1,11 +1,11 @@
-create table task (
+create table tasks (
     id bigint not null auto_increment,
     title varchar(255) not null,
     description varchar(255),
     expiration_date DATE not null,
     state varchar(255) not null,
     priority varchar(255) not null,
-    list_task_id bigint not null,
+    list_task_id bigint,
 
     primary key (id),
     foreign key (list_task_id) references list_tasks(id)

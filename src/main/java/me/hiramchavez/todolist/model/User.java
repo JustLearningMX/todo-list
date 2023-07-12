@@ -72,6 +72,13 @@ public class User implements UserDetails {
         listTasks.setUser(this);
     }
 
+    public ListTasks getListTasksById(Long id) {
+        return this.listTasks.stream()
+          .filter(listTasks -> listTasks.getId().equals(id))
+          .findFirst()
+          .orElse(null);
+    }
+
     @Override
     public String toString() {
         return "User{" +

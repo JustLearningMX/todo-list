@@ -4,9 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.hiramchavez.todolist.dto.listTasks.ListTasksReqDto;
-import me.hiramchavez.todolist.dto.listTasks.ListTasksResDto;
-import me.hiramchavez.todolist.service.ListTasksService;
+import me.hiramchavez.todolist.dto.task.TaskRequestDto;
+import me.hiramchavez.todolist.dto.task.TaskResponseDto;
+import me.hiramchavez.todolist.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,29 +17,30 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/list-tasks")
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
-public class ListTasksController {
+public class TaskController {
 
-    private final ListTasksService listTasksService;
+    private final TaskService taskService;
 
-    @PostMapping("/create")
+    /*Create one o more tasks into a list*/
+    @PostMapping
+    @RequestMapping("/create")
     @Transactional
-    public ResponseEntity<ListTasksResDto> createListTask(
-      @RequestBody @Valid ListTasksReqDto listTasksReqDto,
+    public ResponseEntity<TaskResponseDto> createTasks(
+      @RequestBody @Valid TaskRequestDto taskRequestDto,
       HttpServletRequest request,
-      UriComponentsBuilder uriComponentsBuilder
-    ) {
+      UriComponentsBuilder uriComponentsBuilder) {
 
-        ListTasksResDto listTasksResDto = listTasksService.createListTask(listTasksReqDto, request);
+        TaskResponseDto taskResponseDto = taskService.createTasks(taskRequestDto, request);
 
         URI location = uriComponentsBuilder
-          .path("/list-tasks/{id}")
-          .buildAndExpand(listTasksResDto.id())
+          .path("/user/{id}/list-tasks/{id}")
+          .buildAndExpand(taskResponseDto.userId(), taskResponseDto.ListTaskId())
           .toUri();
 
         return ResponseEntity
           .created(location)
-          .body(listTasksResDto);
+          .body(taskResponseDto);
     }
 }

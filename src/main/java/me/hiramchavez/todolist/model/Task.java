@@ -23,7 +23,7 @@ public class Task {
     private String title;
     private String description;
 
-    @Column(name = "expiration_date")
+    @Column(name = "expiration_date", columnDefinition = "TIMESTAMP")
     private Date expirationDate;
 
     @Enumerated(EnumType.STRING)

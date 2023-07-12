@@ -1,4 +1,4 @@
-package me.hiramchavez.todolist.dto;
+package me.hiramchavez.todolist.dto.listTasks;
 
 import jakarta.validation.constraints.NotBlank;
 

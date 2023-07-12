@@ -2,10 +2,10 @@ package me.hiramchavez.todolist.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import me.hiramchavez.todolist.dto.LoggedUserDto;
-import me.hiramchavez.todolist.dto.UserSignedUpDto;
-import me.hiramchavez.todolist.dto.UserToLoginDto;
-import me.hiramchavez.todolist.dto.UserToSignUpDto;
+import me.hiramchavez.todolist.dto.user.LoggedUserDto;
+import me.hiramchavez.todolist.dto.user.UserSignedUpDto;
+import me.hiramchavez.todolist.dto.user.UserToLoginDto;
+import me.hiramchavez.todolist.dto.user.UserToSignUpDto;
 import me.hiramchavez.todolist.mapper.UserMapper;
 import me.hiramchavez.todolist.model.User;
 import me.hiramchavez.todolist.repository.UserRepository;
