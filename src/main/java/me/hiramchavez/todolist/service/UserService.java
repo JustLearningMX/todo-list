@@ -6,6 +6,8 @@ import me.hiramchavez.todolist.dto.user.LoggedUserDto;
 import me.hiramchavez.todolist.dto.user.UserSignedUpDto;
 import me.hiramchavez.todolist.dto.user.UserToLoginDto;
 import me.hiramchavez.todolist.dto.user.UserToSignUpDto;
+import me.hiramchavez.todolist.exception.user.UserAlreadyExistsException;
+import me.hiramchavez.todolist.exception.user.UserNotFoundException;
 import me.hiramchavez.todolist.mapper.UserMapper;
 import me.hiramchavez.todolist.model.User;
 import me.hiramchavez.todolist.repository.UserRepository;
@@ -25,6 +27,10 @@ public class UserService {
     private final TokenService tokenService;
 
     public UserSignedUpDto signUp(UserToSignUpDto userToSignUpDto) {
+
+        if (userRepository.existsByEmail(userToSignUpDto.email()))
+            throw new UserAlreadyExistsException("User already exists in the database");
+
         // Obtener la contraseña en texto plano
         String plainPassword = userToSignUpDto.password();
 
@@ -44,25 +50,13 @@ public class UserService {
         return userMapper.userToUserSignedUpDto(user);
     }
 
-    //Get user by token
-    public UserSignedUpDto getUser(HttpServletRequest request) {
-        String token = tokenService.getTokenFromHeader(request);
-        String userEmail = tokenService.getVerifier(token).getSubject();
-
-        User user = (User) userRepository.findByEmailAndActiveTrue(userEmail);
-        return userMapper.userToUserSignedUpDto(user);
-    }
-
-    //Allow an Admin get data of another user
-    public UserSignedUpDto getUser(Long id, HttpServletRequest request) {
-        User user = userRepository.getReferenceById(id);
-        return userMapper.userToUserSignedUpDto(user);
-    }
-
     public LoggedUserDto login(UserToLoginDto userToLoginDto) {
 
-        // Obtener el password del usuario en texto plano
+        // Obtener el email del usuario
         String userEmail = userToLoginDto.email();
+
+        if (!userRepository.existsByEmail(userEmail))
+            throw new UserNotFoundException("User not found in the database");
 
         // Obtener el hash de la contraseña del usuario de la BD
         String hashedPassword = userRepository.findByEmailAndActiveTrue(userEmail).getPassword();
@@ -90,5 +84,20 @@ public class UserService {
           usuarioAutenticado.getEmail(),
           token
         );
+    }
+
+    //Get user by token
+    public UserSignedUpDto getUser(HttpServletRequest request) {
+        String token = tokenService.getTokenFromHeader(request);
+        String userEmail = tokenService.getVerifier(token).getSubject();
+
+        User user = (User) userRepository.findByEmailAndActiveTrue(userEmail);
+        return userMapper.userToUserSignedUpDto(user);
+    }
+
+    //Allow an Admin get data of another user
+    public UserSignedUpDto getUser(Long id, HttpServletRequest request) {
+        User user = userRepository.getReferenceById(id);
+        return userMapper.userToUserSignedUpDto(user);
     }
 }

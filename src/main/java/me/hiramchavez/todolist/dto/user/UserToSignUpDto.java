@@ -16,6 +16,8 @@ public record UserToSignUpDto(
       String firstName,
       @NotBlank(message = "Last name is required in order to sign up")
       String lastName,
+      @NotBlank(message = "Role is required in order to sign up")
+      String role,
       @Email(message = "Email must be a valid one ")
       @NotBlank(message = "Email is required in order to sign up")
       String email,
