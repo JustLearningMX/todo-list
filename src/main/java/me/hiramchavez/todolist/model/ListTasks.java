@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
+import me.hiramchavez.todolist.dto.listTasks.ListTasksReqDto;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.ArrayList;
@@ -68,5 +69,21 @@ public class ListTasks {
           ", name='" + name + '\'' +
           ", description='" + description + '\'' +
           '}';
+    }
+
+    public void update(ListTasksReqDto listTasksReqDto) {
+        if (listTasksReqDto.name() != null)
+            this.name = listTasksReqDto.name();
+
+        if (listTasksReqDto.description() != null)
+            this.description = listTasksReqDto.description();
+
+        if (listTasksReqDto.active() != null)
+            this.active = listTasksReqDto.active();
+
+    }
+
+    public void delete() {
+        this.active = false;
     }
 }

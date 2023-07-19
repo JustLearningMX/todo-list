@@ -74,7 +74,7 @@ public class User implements UserDetails {
 
     public ListTasks getListTasksById(Long id) {
         return this.listTasks.stream()
-          .filter(listTasks -> listTasks.getId().equals(id))
+          .filter(listTasks -> listTasks.getId().equals(id) && listTasks.getActive())
           .findFirst()
           .orElse(null);
     }

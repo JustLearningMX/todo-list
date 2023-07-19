@@ -39,6 +39,15 @@ public class UserController {
           .body(userSignedUpDto);
     }
 
+    @PostMapping("/login")
+    @Transactional
+    public ResponseEntity<LoggedUserDto> login(@RequestBody @Valid UserToLoginDto userToLoginDto) {
+
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.login(userToLoginDto));
+    }
+
     @GetMapping()
     public ResponseEntity<UserSignedUpDto> getUser(HttpServletRequest request) {
         return ResponseEntity
@@ -51,14 +60,5 @@ public class UserController {
         return ResponseEntity
           .status(HttpStatus.OK)
           .body(userService.getUser(id, request));
-    }
-
-    @PostMapping("/login")
-    @Transactional
-    public ResponseEntity<LoggedUserDto> login(@RequestBody @Valid UserToLoginDto userToLoginDto) {
-
-        return ResponseEntity
-          .status(HttpStatus.OK)
-          .body(userService.login(userToLoginDto));
     }
 }
