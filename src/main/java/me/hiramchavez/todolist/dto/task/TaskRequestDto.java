@@ -10,7 +10,7 @@ import java.util.List;
  * DTO for {@link me.hiramchavez.todolist.model.Task}
  */
 public record TaskRequestDto(
-      @NotNull(message = "List task id is required")
+      @NotNull(message = "List listtasks id is required")
       Long list_task_id,
       @Valid
       List<TaskBodyReqDto> tasks

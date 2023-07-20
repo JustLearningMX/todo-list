@@ -9,15 +9,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 public record TaskBodyReqDto(
-  @NotBlank(message = "Title for task is required")
+  @NotBlank(message = "Title for listtasks is required")
   String title,
-  @NotBlank(message = "Description for task is required")
+  @NotBlank(message = "Description for listtasks is required")
   String description,
-  @NotNull(message = "Expiration date for task is required")
+  @NotNull(message = "Expiration date for listtasks is required")
   Date expirationDate,
-  @NotNull(message = "State for task is required")
+  @NotNull(message = "State for listtasks is required")
   State state,
-  @NotNull(message = "Priority for task is required")
+  @NotNull(message = "Priority for listtasks is required")
   Priority priority
 
 ) implements Serializable {

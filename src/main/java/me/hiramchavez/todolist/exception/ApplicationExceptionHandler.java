@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-@Order(3)
+@Order(4)
 public class ApplicationExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -42,7 +42,6 @@ public class ApplicationExceptionHandler {
     // General Exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApplicationExceptionResponse> genericException(Exception ex, HttpServletRequest req) {
-        System.out.println("ApplicationExceptionHandler.genericException");
         Map<String, String> errors = new HashMap<>(Map.of(ex.getClass().getSimpleName(), ex.getMessage()));
         ApplicationExceptionResponse errorResponse = createResponse(HttpStatus.BAD_REQUEST, req, errors);
         return ResponseEntity.status(400).body(errorResponse);

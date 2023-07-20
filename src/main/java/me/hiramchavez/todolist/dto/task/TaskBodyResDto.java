@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public record TaskBodyResDto(
-  @NotNull(message = "Id of task is required")
+  @NotNull(message = "Id of listtasks is required")
   Long id,
   String title,
   String description,

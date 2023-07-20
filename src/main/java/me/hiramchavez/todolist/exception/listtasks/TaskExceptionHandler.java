@@ -1,8 +1,7 @@
-package me.hiramchavez.todolist.exception.task;
+package me.hiramchavez.todolist.exception.listtasks;
 
 import jakarta.servlet.http.HttpServletRequest;
 import me.hiramchavez.todolist.exception.ApplicationExceptionResponse;
-import me.hiramchavez.todolist.exception.user.UserAlreadyExistsException;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +13,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-@Order(2)
+@Order(3)
 public class TaskExceptionHandler {
 
-    @ExceptionHandler(ListOfTasksEmptyException.class)
-    public ResponseEntity<ApplicationExceptionResponse> medicoNotFoundException(ListOfTasksEmptyException ex, HttpServletRequest req) {
+    @ExceptionHandler(ListTasksEmptyException.class)
+    public ResponseEntity<ApplicationExceptionResponse> medicoNotFoundException(ListTasksEmptyException ex, HttpServletRequest req) {
         Map<String, String> errors = new HashMap<>(Map.of(ex.getClass().getSimpleName(), ex.getMessage()));
         ApplicationExceptionResponse errorResponse = createResponse(HttpStatus.BAD_REQUEST, req, errors);
 
         return ResponseEntity.status(400).body(errorResponse);
     }
 
-    @ExceptionHandler(ListOfTasksNotFoundException.class)
-    public ResponseEntity<ApplicationExceptionResponse> medicoNotFoundException(ListOfTasksNotFoundException ex, HttpServletRequest req) {
+    @ExceptionHandler(ListTasksNotFoundException.class)
+    public ResponseEntity<ApplicationExceptionResponse> medicoNotFoundException(ListTasksNotFoundException ex, HttpServletRequest req) {
         Map<String, String> errors = new HashMap<>(Map.of(ex.getClass().getSimpleName(), ex.getMessage()));
         ApplicationExceptionResponse errorResponse = createResponse(HttpStatus.NOT_FOUND, req, errors);
 
