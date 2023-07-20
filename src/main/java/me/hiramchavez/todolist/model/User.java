@@ -2,6 +2,7 @@ package me.hiramchavez.todolist.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.hiramchavez.todolist.dto.user.UserToUpdateDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -90,5 +91,15 @@ public class User implements UserDetails {
           ", active=" + active +
           ", role=" + role +
           '}';
+    }
+
+    public User update(UserToUpdateDto userToUpdateDto) {
+        if (userToUpdateDto.firstName() != null)
+            this.firstName = userToUpdateDto.firstName();
+
+        if (userToUpdateDto.lastName() != null)
+            this.lastName = userToUpdateDto.lastName();
+
+        return this;
     }
 }

@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.hiramchavez.todolist.dto.user.LoggedUserDto;
-import me.hiramchavez.todolist.dto.user.UserSignedUpDto;
-import me.hiramchavez.todolist.dto.user.UserToLoginDto;
-import me.hiramchavez.todolist.dto.user.UserToSignUpDto;
+import me.hiramchavez.todolist.dto.user.*;
 import me.hiramchavez.todolist.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +43,17 @@ public class UserController {
         return ResponseEntity
           .status(HttpStatus.OK)
           .body(userService.login(userToLoginDto));
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<UserSignedUpDto> updateUser(
+      @RequestBody @Valid UserToUpdateDto userToUpdateDto, HttpServletRequest request) {
+
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.updateUser(userToUpdateDto, request));
+
     }
 
     @GetMapping()

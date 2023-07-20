@@ -1,9 +1,6 @@
 package me.hiramchavez.todolist.mapper;
 
-import me.hiramchavez.todolist.dto.user.LoggedUserDto;
-import me.hiramchavez.todolist.dto.user.UserSignedUpDto;
-import me.hiramchavez.todolist.dto.user.UserToLoginDto;
-import me.hiramchavez.todolist.dto.user.UserToSignUpDto;
+import me.hiramchavez.todolist.dto.user.*;
 import me.hiramchavez.todolist.model.User;
 import org.mapstruct.*;
 
@@ -26,4 +23,7 @@ public interface UserMapper {
 
     LoggedUserDto userToLoggedUserDto(User user);
 
+    User toEntity(UserToUpdateDto userToUpdateDto);
+
+    UserToUpdateDto userToUserToUpdateDto(User user);
 }

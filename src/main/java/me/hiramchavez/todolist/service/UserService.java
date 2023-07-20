@@ -2,13 +2,11 @@ package me.hiramchavez.todolist.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import me.hiramchavez.todolist.dto.user.LoggedUserDto;
-import me.hiramchavez.todolist.dto.user.UserSignedUpDto;
-import me.hiramchavez.todolist.dto.user.UserToLoginDto;
-import me.hiramchavez.todolist.dto.user.UserToSignUpDto;
+import me.hiramchavez.todolist.dto.user.*;
 import me.hiramchavez.todolist.exception.user.UserAlreadyExistsException;
 import me.hiramchavez.todolist.exception.user.UserNotFoundException;
 import me.hiramchavez.todolist.mapper.UserMapper;
+import me.hiramchavez.todolist.model.Role;
 import me.hiramchavez.todolist.model.User;
 import me.hiramchavez.todolist.repository.UserRepository;
 import me.hiramchavez.todolist.security.PasswordUtils;
@@ -42,6 +40,9 @@ public class UserService {
 
         // Asignar el hash de la contraseña a la entidad
         user.setPassword(hashedPassword);
+
+        if (userToSignUpDto.role().equals(Role.ADMIN.name()))
+            user.setRole(Role.USER);
 
         // Guardar el usuario en la base de datos
         userRepository.save(user);
@@ -88,10 +89,9 @@ public class UserService {
 
     //Get user by token
     public UserSignedUpDto getUser(HttpServletRequest request) {
-        String token = tokenService.getTokenFromHeader(request);
-        String userEmail = tokenService.getVerifier(token).getSubject();
 
-        User user = (User) userRepository.findByEmailAndActiveTrue(userEmail);
+        User user = getUserFromDatabase(request);
+
         return userMapper.userToUserSignedUpDto(user);
     }
 
@@ -99,5 +99,21 @@ public class UserService {
     public UserSignedUpDto getUser(Long id, HttpServletRequest request) {
         User user = userRepository.getReferenceById(id);
         return userMapper.userToUserSignedUpDto(user);
+    }
+
+    public UserSignedUpDto updateUser(UserToUpdateDto userToUpdateDto, HttpServletRequest request) {
+        User user = getUserFromDatabase(request);
+
+        return userMapper.userToUserSignedUpDto(user.update(userToUpdateDto));
+    }
+
+    private User getUserFromDatabase(HttpServletRequest request) {
+        String token = tokenService.getTokenFromHeader(request); //Get token from the header
+        String userEmail = tokenService.getVerifier(token).getSubject(); //Get the user email from the token
+
+        if (!userRepository.existsByEmail(userEmail))
+            throw new UserNotFoundException("User not found in the database");
+
+        return (User) userRepository.findByEmailAndActiveTrue(userEmail);
     }
 }
