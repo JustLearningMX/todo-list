@@ -3,6 +3,7 @@ package me.hiramchavez.todolist.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.hiramchavez.todolist.dto.task.TaskBodyResDto;
 
 import java.util.Date;
 import java.util.Objects;
@@ -35,6 +36,23 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "list_task_id", referencedColumnName = "id")
     private ListTasks listTasks;
+
+    public void update(TaskBodyResDto taskBodyReqDto) {
+        if (taskBodyReqDto.title() != null)
+            this.title = taskBodyReqDto.title();
+
+        if (taskBodyReqDto.description() != null)
+            this.description = taskBodyReqDto.description();
+
+        if (taskBodyReqDto.expirationDate() != null)
+            this.expirationDate = taskBodyReqDto.expirationDate();
+
+        if (taskBodyReqDto.state() != null)
+            this.state = taskBodyReqDto.state();
+
+        if (taskBodyReqDto.priority() != null)
+            this.priority = taskBodyReqDto.priority();
+    }
 
     @Override
     public boolean equals(Object o) {

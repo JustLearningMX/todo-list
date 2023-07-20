@@ -2,6 +2,7 @@ package me.hiramchavez.todolist.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.dto.listTasks.ListTasksReqDto;
 import me.hiramchavez.todolist.dto.listTasks.ListTasksResDto;
 import me.hiramchavez.todolist.mapper.ListTasksMapper;
@@ -55,12 +56,14 @@ public class ListTasksService {
         return listTasksMapper.toDto(listTasks); //Return the list tasks response dto
     }
 
-    public void deleteListTask(Long id, HttpServletRequest request) {
+    public ResponseDeleteDto deleteListTask(Long id, HttpServletRequest request) {
         String token = tokenService.getTokenFromHeader(request); //Get the token from the header
         String userEmail = tokenService.getVerifier(token).getSubject(); //Get the user email from the token
         User user = (User) userRepository.findByEmailAndActiveTrue(userEmail); //Get the user from the database
 
         ListTasks listTasks = user.getListTasksById(id); //Get the list tasks from the user by id
         listTasks.delete(); //set active to false
+
+        return new ResponseDeleteDto(false, "List tasks deleted successfully"); //Return the response delete dto
     }
 }

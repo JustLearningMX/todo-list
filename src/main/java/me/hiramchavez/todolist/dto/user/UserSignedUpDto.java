@@ -14,8 +14,8 @@ public record UserSignedUpDto(
       String lastName,
       String email,
       Boolean active,
-      String role
-//      List<ListTasksResDto> listTasks
+      String role,
+      List<ListTasksResDto> listTasks
 
 ) implements Serializable {
 }

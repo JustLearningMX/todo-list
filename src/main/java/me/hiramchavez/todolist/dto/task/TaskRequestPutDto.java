@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * DTO for {@link me.hiramchavez.todolist.model.Task}
  */
-public record TaskRequestDto(
+public record TaskRequestPutDto(
       @NotNull(message = "List task id is required")
       Long list_task_id,
       @Valid
-      List<TaskBodyReqDto> tasks
+      List<TaskBodyResDto> tasks
 
 ) implements Serializable {
 }

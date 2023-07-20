@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.dto.listTasks.ListTasksReqDto;
 import me.hiramchavez.todolist.dto.listTasks.ListTasksResDto;
 import me.hiramchavez.todolist.service.ListTasksService;
@@ -22,7 +23,7 @@ public class ListTasksController {
 
     private final ListTasksService listTasksService;
 
-    @PostMapping("/create")
+    @PostMapping
     @Transactional
     public ResponseEntity<ListTasksResDto> createListTask(
       @RequestBody @Valid ListTasksReqDto listTasksReqDto,
@@ -56,9 +57,10 @@ public class ListTasksController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> deleteListTasks(@PathVariable Long id, HttpServletRequest request) {
-        listTasksService.deleteListTask(id, request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<ResponseDeleteDto> deleteListTasks(@PathVariable Long id, HttpServletRequest request) {
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(listTasksService.deleteListTask(id, request));
     }
 
 }

@@ -57,7 +57,8 @@ public class TokenService {
             verifier.getSubject();
 
         } catch (JWTVerificationException e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
+            throw new JWTVerificationException(e.getMessage());
         }
 
         if (verifier.getSubject() == null)
