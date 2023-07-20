@@ -1,9 +1,9 @@
-package me.hiramchavez.todolist.exception.user;
+package me.hiramchavez.todolist.exception;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
 
-public record UserExceptionResponse(
+public record ApplicationExceptionResponse(
       Boolean isError,
       ZonedDateTime timestamp,
       Integer statusCode,

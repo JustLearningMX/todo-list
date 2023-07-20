@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.dto.task.*;
+import me.hiramchavez.todolist.exception.task.ListOfTasksEmptyException;
+import me.hiramchavez.todolist.exception.task.ListOfTasksNotFoundException;
 import me.hiramchavez.todolist.exception.user.UserNotFoundException;
 import me.hiramchavez.todolist.mapper.TaskMapper;
 import me.hiramchavez.todolist.model.ListTasks;
@@ -28,16 +30,19 @@ public class TaskService {
 
     public TaskResponseDto createTasks(TaskRequestDto taskRequestDto, HttpServletRequest request) {
 
+        //Get the user from the database using the token in the request
+        //to validate the user
         User user = getUserFromDatabase(request);
 
         if (taskRequestDto.tasks().size() < 1)
-            throw new IllegalArgumentException("The list of tasks is empty. Add at least one task");
+            throw new ListOfTasksEmptyException("The list of tasks received to update is empty. Add at least one task");
 
         //Get the list of tasks of the user and clean it
         ListTasks taskList = user
           .getListTasksById(taskRequestDto.list_task_id())
           .cleanTasks();
 
+        //Save the tasks in the database and add them to the list of tasks of the user
         List<TaskBodyResDto> listOfTaskBodyResDto = taskRequestDto.tasks().stream() //
           .map( taskBodyDto -> {
               Task task = taskRepository.save(taskMapper.toEntity(taskBodyDto)); //Save the task in the database
@@ -61,15 +66,13 @@ public class TaskService {
         User user = getUserFromDatabase(request);
 
         if (taskRequestPutDto.tasks().size() < 1)
-            throw new IllegalArgumentException("The list of tasks received to update is empty. Add at least one task");
+            throw new ListOfTasksEmptyException("The list of tasks received to update is empty. Add at least one task");
 
-        //Get the list of tasks of the user by its ID
+        //Get user's list of tasks by ListTasks ID
         ListTasks listTasksFromUser = user.getListTasksById(taskRequestPutDto.list_task_id());
 
         if (listTasksFromUser == null)
-            throw new IllegalArgumentException(String.format("The list of tasks with id: %d does not exist", taskRequestPutDto.list_task_id()));
-
-        //listTasksFromUser.cleanTasks(); //Clean the list of tasks
+            throw new ListOfTasksNotFoundException(String.format("The list of tasks with id: %d does not exist", taskRequestPutDto.list_task_id()));
 
         //Set the new list of tasks
         listTasksFromUser.getTasks().forEach( task -> {
@@ -93,13 +96,13 @@ public class TaskService {
         User user = getUserFromDatabase(request);
 
         if (listTaskReqDto.listId().size() < 1)
-            throw new IllegalArgumentException("The list of tasks received is empty. Add at least one task");
+            throw new ListOfTasksEmptyException("The list of tasks received is empty. Add at least one task");
 
         //Get the list of list tasks of the user
         List<ListTasks> listOfListTasksFromUser = user.getListTasks();
 
         if (listOfListTasksFromUser.isEmpty())
-            throw new IllegalArgumentException("The list of tasks from database is empty. Add at least one task");
+            throw new ListOfTasksEmptyException("The list of tasks from database is empty. Add at least one task in order to delete it");
 
         listOfListTasksFromUser
           .forEach(listTasks -> {
