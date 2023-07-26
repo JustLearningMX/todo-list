@@ -2,6 +2,7 @@ package me.hiramchavez.todolist.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.dto.user.*;
 import me.hiramchavez.todolist.exception.user.UserAlreadyExistsException;
 import me.hiramchavez.todolist.exception.user.UserNotFoundException;
@@ -26,7 +27,7 @@ public class UserService {
 
     public UserSignedUpDto signUp(UserToSignUpDto userToSignUpDto) {
 
-        if (userRepository.existsByEmail(userToSignUpDto.email()))
+        if (userRepository.existsByEmailAndActiveIsTrue(userToSignUpDto.email()))
             throw new UserAlreadyExistsException("User already exists in the database");
 
         // Obtener la contraseña en texto plano
@@ -56,7 +57,7 @@ public class UserService {
         // Obtener el email del usuario
         String userEmail = userToLoginDto.email();
 
-        if (!userRepository.existsByEmail(userEmail))
+        if (!userRepository.existsByEmailAndActiveIsTrue(userEmail))
             throw new UserNotFoundException("User not found in the database");
 
         // Obtener el hash de la contraseña del usuario de la BD
@@ -107,11 +108,17 @@ public class UserService {
         return userMapper.userToUserSignedUpDto(user.update(userToUpdateDto));
     }
 
+    public ResponseDeleteDto deleteUser(HttpServletRequest request) {
+        User user = getUserFromDatabase(request);
+        user.setActive(false);
+        return new ResponseDeleteDto(false, "User deleted successfully");
+    }
+
     private User getUserFromDatabase(HttpServletRequest request) {
         String token = tokenService.getTokenFromHeader(request); //Get token from the header
         String userEmail = tokenService.getVerifier(token).getSubject(); //Get the user email from the token
 
-        if (!userRepository.existsByEmail(userEmail))
+        if (!userRepository.existsByEmailAndActiveIsTrue(userEmail))
             throw new UserNotFoundException("User not found in the database");
 
         return (User) userRepository.findByEmailAndActiveTrue(userEmail);

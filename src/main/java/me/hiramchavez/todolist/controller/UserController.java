@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.dto.user.*;
 import me.hiramchavez.todolist.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -45,17 +46,6 @@ public class UserController {
           .body(userService.login(userToLoginDto));
     }
 
-    @PutMapping
-    @Transactional
-    public ResponseEntity<UserSignedUpDto> updateUser(
-      @RequestBody @Valid UserToUpdateDto userToUpdateDto, HttpServletRequest request) {
-
-        return ResponseEntity
-          .status(HttpStatus.OK)
-          .body(userService.updateUser(userToUpdateDto, request));
-
-    }
-
     @GetMapping()
     public ResponseEntity<UserSignedUpDto> getUser(HttpServletRequest request) {
         return ResponseEntity
@@ -68,5 +58,24 @@ public class UserController {
         return ResponseEntity
           .status(HttpStatus.OK)
           .body(userService.getUser(id, request));
+    }
+
+    @PutMapping
+    @Transactional
+    public ResponseEntity<UserSignedUpDto> updateUser(
+      @RequestBody @Valid UserToUpdateDto userToUpdateDto, HttpServletRequest request) {
+
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.updateUser(userToUpdateDto, request));
+
+    }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<ResponseDeleteDto> deleteUser(HttpServletRequest request) {
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.deleteUser(request));
     }
 }

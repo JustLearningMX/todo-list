@@ -78,7 +78,7 @@ public class ListTasksService {
         String token = tokenService.getTokenFromHeader(request); //Get token from the header
         String userEmail = tokenService.getVerifier(token).getSubject(); //Get the user email from the token
 
-        if (!userRepository.existsByEmail(userEmail))
+        if (!userRepository.existsByEmailAndActiveIsTrue(userEmail))
             throw new UserNotFoundException("User not found in the database");
 
         return (User) userRepository.findByEmailAndActiveTrue(userEmail);
