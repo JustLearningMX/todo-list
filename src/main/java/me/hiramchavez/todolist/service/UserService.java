@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.dto.user.*;
 import me.hiramchavez.todolist.exception.user.UserAlreadyExistsException;
+import me.hiramchavez.todolist.exception.user.UserDataLoginException;
 import me.hiramchavez.todolist.exception.user.UserNotFoundException;
 import me.hiramchavez.todolist.mapper.UserMapper;
 import me.hiramchavez.todolist.model.Role;
@@ -67,7 +68,7 @@ public class UserService {
         boolean passwordMatches = PasswordUtils.verifyPassword(userToLoginDto.password(), hashedPassword);
 
         if (!passwordMatches)
-            throw new RuntimeException("El usuario o contraseña no coincide");
+            throw new UserDataLoginException("User email or password is incorrect");
 
         //Credenciales de autenticacion del usuario. Se usa el login como username y la clave como password
         Authentication authCredentials = new UsernamePasswordAuthenticationToken(

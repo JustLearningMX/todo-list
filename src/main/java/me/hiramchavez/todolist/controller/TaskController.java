@@ -1,5 +1,6 @@
 package me.hiramchavez.todolist.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
+@Tag(name = "Tasks", description = "Manage all endpoints about Tasks")
 public class TaskController {
 
     private final TaskService taskService;

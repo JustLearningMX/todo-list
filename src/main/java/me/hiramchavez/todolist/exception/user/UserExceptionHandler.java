@@ -16,20 +16,29 @@ import java.util.Map;
 @Order(1)
 public class UserExceptionHandler {
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    //@ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApplicationExceptionResponse> userAlreadyExistsException(UserAlreadyExistsException ex, HttpServletRequest req) {
+        Map<String, String> errors = new HashMap<>(Map.of(ex.getClass().getSimpleName(), ex.getMessage()));
+        ApplicationExceptionResponse errorResponse = createResponse(HttpStatus.BAD_REQUEST, req, errors);
+
+        return ResponseEntity.status(400).body(errorResponse);
+    }
+
+    @ExceptionHandler(UserDataLoginException.class)
+    public ResponseEntity<ApplicationExceptionResponse> userDataLoginException(UserDataLoginException ex, HttpServletRequest req) {
+        Map<String, String> errors = new HashMap<>(Map.of(ex.getClass().getSimpleName(), ex.getMessage()));
+        ApplicationExceptionResponse errorResponse = createResponse(HttpStatus.BAD_REQUEST, req, errors);
+
+        return ResponseEntity.status(400).body(errorResponse);
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ApplicationExceptionResponse> medicoNotFoundException(UserNotFoundException ex, HttpServletRequest req) {
+    public ResponseEntity<ApplicationExceptionResponse> userNotFoundException(UserNotFoundException ex, HttpServletRequest req) {
         Map<String, String> errors = new HashMap<>(Map.of(ex.getClass().getSimpleName(), ex.getMessage()));
         ApplicationExceptionResponse errorResponse = createResponse(HttpStatus.NOT_FOUND, req, errors);
 
         return ResponseEntity.status(404).body(errorResponse);
-    }
-
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ApplicationExceptionResponse> medicoNotFoundException(UserAlreadyExistsException ex, HttpServletRequest req) {
-        Map<String, String> errors = new HashMap<>(Map.of(ex.getClass().getSimpleName(), ex.getMessage()));
-        ApplicationExceptionResponse errorResponse = createResponse(HttpStatus.BAD_REQUEST, req, errors);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     private static ApplicationExceptionResponse createResponse(
