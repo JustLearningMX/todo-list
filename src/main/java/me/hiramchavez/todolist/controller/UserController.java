@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +40,7 @@ public class UserController {
           @Content(mediaType = "application/json",
           schema = @Schema(implementation = UserSignedUpDto.class))
         }),
-      @ApiResponse(responseCode = "400", description = "User Already Exists", content = {@Content})
+      @ApiResponse(responseCode = "400", description = "User Already Exists", content = {@Content}),
     })
     @SecurityRequirements()
     @PostMapping("/sign-up")
@@ -87,7 +86,6 @@ public class UserController {
     @Operation(
       summary = "Get a user using its token.",
       description = "Let a user get its data using the token."
-      //tags = { "users", "get" }
     )
     @ApiResponses(value = {
       @ApiResponse(
@@ -96,6 +94,7 @@ public class UserController {
           @Content(mediaType = "application/json",
             schema = @Schema(implementation = UserSignedUpDto.class))
         }),
+      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
       @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
     })
     @GetMapping()
@@ -108,7 +107,6 @@ public class UserController {
     @Operation(
       summary = "Admin get a user by ID.",
       description = "Let an Admin get any user data using the User's ID. Token is required."
-      //tags = { "users", "get" }
     )
     @ApiResponses(value = {
       @ApiResponse(
@@ -117,6 +115,7 @@ public class UserController {
           @Content(mediaType = "application/json",
             schema = @Schema(implementation = UserSignedUpDto.class))
         }),
+      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
       @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
     })
     @GetMapping("/{id}")
@@ -129,7 +128,6 @@ public class UserController {
     @Operation(
       summary = "Update data user using token.",
       description = "Let a User update data using the Token."
-      //tags = { "users", "put" }
     )
     @ApiResponses(value = {
       @ApiResponse(
@@ -138,6 +136,7 @@ public class UserController {
           @Content(mediaType = "application/json",
             schema = @Schema(implementation = UserSignedUpDto.class))
         }),
+      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
       @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
     })
     @PutMapping
@@ -154,7 +153,6 @@ public class UserController {
     @Operation(
       summary = "Delete data user using token.",
       description = "Let a User delete its data using the Token."
-      //tags = { "users", "delete" }
     )
     @ApiResponses(value = {
       @ApiResponse(
@@ -163,6 +161,7 @@ public class UserController {
           @Content(mediaType = "application/json",
             schema = @Schema(implementation = ResponseDeleteDto.class))
         }),
+      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
       @ApiResponse(responseCode = "404", description = "User Not Found", content = { @Content(schema = @Schema()) })
     })
     @DeleteMapping

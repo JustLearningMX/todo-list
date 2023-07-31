@@ -38,9 +38,12 @@ public class TaskService {
             throw new ListTasksEmptyException("The list of tasks received to update is empty. Add at least one listtasks");
 
         //Get the list of tasks of the user and clean it
-        ListTasks taskList = user
-          .getListTasksById(taskRequestDto.list_task_id())
-          .cleanTasks();
+        ListTasks taskList = user.getListTasksById(taskRequestDto.list_task_id());
+
+        if (taskList == null)
+            throw new ListTasksNotFoundException(String.format("The list of tasks with id: %d does not exist", taskRequestDto.list_task_id()));
+
+        taskList.cleanTasks();
 
         //Save the tasks in the database and add them to the list of tasks of the user
         List<TaskBodyResDto> listOfTaskBodyResDto = taskRequestDto.tasks().stream() //
