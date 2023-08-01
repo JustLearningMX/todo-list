@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.dto.listTasks.ListTasksReqDto;
 import me.hiramchavez.todolist.dto.listTasks.ListTasksResDto;
-import me.hiramchavez.todolist.dto.user.UserSignedUpDto;
 import me.hiramchavez.todolist.service.ListTasksService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
