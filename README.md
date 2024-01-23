@@ -64,7 +64,7 @@ git clone https://github.com/JustLearningMX/todo-list.git
 2. Run the application from the IDE.
 3. Open the browser and go to the URL `http://localhost:8080/swagger-ui/index.html` or use the demo on Heroku shown below on section Demo 👨‍💻.
 4. Use the Swagger UI to test the API.
-5. Create a user with the endpoint `POST /users/sign-up` and the following body:
+5. Create a user with the endpoint `POST /users` and the following body:
     ```json
     {
       "firstName": "John",
@@ -75,7 +75,7 @@ git clone https://github.com/JustLearningMX/todo-list.git
       "active": true
     }
     ```
-6. Login with the endpoint `POST /users/login` and the following body:
+6. Login with the endpoint `POST /users/auth` and the following body:
     ```json
     {
       "email": "myemail@example.com",
