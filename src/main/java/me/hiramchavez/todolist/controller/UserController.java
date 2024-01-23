@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @Tag(name = "Users", description = "Manage all endpoints about Users")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
