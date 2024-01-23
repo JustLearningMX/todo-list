@@ -23,7 +23,6 @@ import java.net.URI;
 
 @Tag(name = "List of Tasks", description = "Manage all endpoints about List of Tasks")
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/list-tasks")
 @RequiredArgsConstructor
 public class ListTasksController {

@@ -24,7 +24,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
 @Tag(name = "Tasks", description = "Manage all endpoints about Tasks")
