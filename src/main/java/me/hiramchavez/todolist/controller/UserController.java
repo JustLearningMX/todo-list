@@ -30,7 +30,7 @@ public class UserController {
     private final UserService userService;
 
     @Operation(
-      summary = "Sign Up a new User.",
+      summary = "Sign up a new User.",
       description = "Let a user sign up with the email account."
     )
     @ApiResponses(value = {
@@ -43,7 +43,7 @@ public class UserController {
       @ApiResponse(responseCode = "400", description = "User Already Exists", content = {@Content}),
     })
     @SecurityRequirements()
-    @PostMapping("/sign-up")
+    @PostMapping()
     @Transactional
     public ResponseEntity<UserSignedUpDto> signUp(@RequestBody @Valid UserToSignUpDto userToSignUpDto, UriComponentsBuilder uriComponentsBuilder) {
 
@@ -57,72 +57,6 @@ public class UserController {
         return ResponseEntity
           .created(location)
           .body(userSignedUpDto);
-    }
-
-    @Operation(
-      summary = "User Login section.",
-      description = "Let a user login with the email account. Return a token"
-    )
-    @ApiResponses(value = {
-      @ApiResponse(
-        responseCode = "200", description = "User logged successfully",
-        content = {
-          @Content(mediaType = "application/json",
-            schema = @Schema(implementation = LoggedUserDto.class))
-        }),
-      @ApiResponse(responseCode = "400", description = "User data login incorrect", content = {@Content}),
-      @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
-    })
-    @SecurityRequirements()
-    @PostMapping("/login")
-    @Transactional
-    public ResponseEntity<LoggedUserDto> login(@RequestBody @Valid UserToLoginDto userToLoginDto) {
-
-        return ResponseEntity
-          .status(HttpStatus.OK)
-          .body(userService.login(userToLoginDto));
-    }
-
-    @Operation(
-      summary = "Get a user using its token.",
-      description = "Let a user get its data using the token."
-    )
-    @ApiResponses(value = {
-      @ApiResponse(
-        responseCode = "200", description = "User found successfully.",
-        content = {
-          @Content(mediaType = "application/json",
-            schema = @Schema(implementation = UserSignedUpDto.class))
-        }),
-      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
-      @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
-    })
-    @GetMapping()
-    public ResponseEntity<UserSignedUpDto> getUser(HttpServletRequest request) {
-        return ResponseEntity
-          .status(HttpStatus.OK)
-          .body(userService.getUser(request));
-    }
-
-    @Operation(
-      summary = "Admin get a user by ID.",
-      description = "Let an Admin get any user data using the User's ID. Token is required."
-    )
-    @ApiResponses(value = {
-      @ApiResponse(
-        responseCode = "200", description = "User found successfully.",
-        content = {
-          @Content(mediaType = "application/json",
-            schema = @Schema(implementation = UserSignedUpDto.class))
-        }),
-      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
-      @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
-    })
-    @GetMapping("/{id}")
-    public ResponseEntity<UserSignedUpDto> getUser(@PathVariable Long id, HttpServletRequest request) {
-        return ResponseEntity
-          .status(HttpStatus.OK)
-          .body(userService.getUser(id, request));
     }
 
     @Operation(
@@ -148,6 +82,74 @@ public class UserController {
           .status(HttpStatus.OK)
           .body(userService.updateUser(userToUpdateDto, request));
 
+    }
+
+    //**TODO:
+
+    @Operation(
+      summary = "User Login section.",
+      description = "Let a user login with the email account. Return a token"
+    )
+    @ApiResponses(value = {
+      @ApiResponse(
+        responseCode = "200", description = "User logged successfully",
+        content = {
+          @Content(mediaType = "application/json",
+            schema = @Schema(implementation = LoggedUserDto.class))
+        }),
+      @ApiResponse(responseCode = "400", description = "User data login incorrect", content = {@Content}),
+      @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
+    })
+    @SecurityRequirements()
+    @PostMapping("/auth")
+    @Transactional
+    public ResponseEntity<LoggedUserDto> login(@RequestBody @Valid UserToLoginDto userToLoginDto) {
+
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.login(userToLoginDto));
+    }
+
+    @Operation(
+      summary = "Get a user using its token.",
+      description = "Let a user get its data using the token."
+    )
+    @ApiResponses(value = {
+      @ApiResponse(
+        responseCode = "200", description = "User found successfully.",
+        content = {
+          @Content(mediaType = "application/json",
+            schema = @Schema(implementation = UserSignedUpDto.class))
+        }),
+      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+      @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
+    })
+    @GetMapping("/me")
+    public ResponseEntity<UserSignedUpDto> getUser(HttpServletRequest request) {
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.getUser(request));
+    }
+
+    @Operation(
+      summary = "Admin get a user by ID.",
+      description = "Let an Admin get any user data using the User's ID. Token is required."
+    )
+    @ApiResponses(value = {
+      @ApiResponse(
+        responseCode = "200", description = "User found successfully.",
+        content = {
+          @Content(mediaType = "application/json",
+            schema = @Schema(implementation = UserSignedUpDto.class))
+        }),
+      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+      @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content})
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<UserSignedUpDto> getUser(@PathVariable Long id, HttpServletRequest request) {
+        return ResponseEntity
+          .status(HttpStatus.OK)
+          .body(userService.getUser(id, request));
     }
 
     @Operation(
