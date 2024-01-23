@@ -31,9 +31,9 @@ public class SecurityConfigurations {
         .sessionManagement( sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests( auth ->
             auth
-              .requestMatchers(HttpMethod.POST, "/users/sign-up")
+              .requestMatchers(HttpMethod.POST, "/users")
                 .permitAll()
-              .requestMatchers(HttpMethod.POST, "/users/login")
+              .requestMatchers(HttpMethod.POST, "/users/auth")
                 .permitAll()
               .requestMatchers(HttpMethod.GET, "/users/{id}")
                 .hasAuthority(Role.ADMIN.name())

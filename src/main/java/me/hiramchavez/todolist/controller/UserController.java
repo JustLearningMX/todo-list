@@ -84,8 +84,6 @@ public class UserController {
 
     }
 
-    //**TODO:
-
     @Operation(
       summary = "User Login section.",
       description = "Let a user login with the email account. Return a token"
