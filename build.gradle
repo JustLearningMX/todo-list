@@ -38,6 +38,8 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 

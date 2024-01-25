@@ -32,8 +32,8 @@ public class SecurityConfigurations {
           .sessionManagement( sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
           .authorizeHttpRequests( auth ->
             auth
-              .requestMatchers(HttpMethod.POST, "/users")
-                .permitAll()
+              .requestMatchers(HttpMethod.GET, "/users/me")
+                .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
               .requestMatchers(HttpMethod.POST, "/users/auth")
                 .permitAll()
               .requestMatchers(HttpMethod.GET, "/users/{id}")
@@ -44,6 +44,8 @@ public class SecurityConfigurations {
                 .permitAll()
               .requestMatchers(HttpMethod.GET, "/users")
                 .hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
+              .requestMatchers(HttpMethod.POST, "/users")
+                .permitAll()
               .anyRequest()
                 .authenticated()
           )
