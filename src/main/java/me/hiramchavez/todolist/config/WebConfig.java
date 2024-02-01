@@ -10,6 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        registry.addMapping("/**")
+          .allowedOrigins("*") // Puedes querer restringir esto a orígenes específicos en un entorno de producción
+          .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+          .allowedHeaders("Authorization", "Content-Type")
+          .exposedHeaders("Authorization") // Si estás utilizando un encabezado personalizado
+          .allowCredentials(false)
+          .maxAge(3600); // Máximo tiempo de almacenamiento en caché de la respuesta de pre-vuelo CORS
     }
 }
