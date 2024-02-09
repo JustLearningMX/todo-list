@@ -11,10 +11,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.hiramchavez.todolist.dto.listTasks.ListTasksResDto;
-import me.hiramchavez.todolist.dto.task.ListTaskReqDto;
-import me.hiramchavez.todolist.dto.task.TaskRequestDto;
-import me.hiramchavez.todolist.dto.task.TaskRequestPutDto;
-import me.hiramchavez.todolist.dto.task.TaskResponseDto;
+import me.hiramchavez.todolist.dto.task.*;
 import me.hiramchavez.todolist.dto.ResponseDeleteDto;
 import me.hiramchavez.todolist.service.TaskService;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +28,40 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    /*Create ONLY one task into a list*/
+    @Operation(
+      summary = "Create only one Task of a list. Token is required.",
+      description = "Let a user create create one task into a list with the user's token."
+    )
+    @ApiResponses(value = {
+      @ApiResponse(
+        responseCode = "200", description = "Task created successfully.",
+        content = {
+          @Content(mediaType = "application/json",
+            schema = @Schema(implementation = TaskBodyResDto.class))
+        }),
+      @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
+      @ApiResponse(responseCode = "404", description = "User Not Found.\t\n\n List of Tasks Not Found.\t\n\n Task received is empty.", content = {@Content})
+    })
+    @PostMapping
+    @Transactional
+    public ResponseEntity<TaskBodyResDto> createOnlyOneTask(
+      @RequestBody @Valid OneTaskRequestDto oneTaskBodyReqDto,
+      HttpServletRequest request,
+      UriComponentsBuilder uriComponentsBuilder) {
+
+        TaskBodyResDto taskBodyResDto = taskService.createOneTask(oneTaskBodyReqDto, request);
+
+        URI location = uriComponentsBuilder
+          .path("/tasks/{id}")
+          .buildAndExpand(taskBodyResDto.id())
+          .toUri();
+
+        return ResponseEntity
+          .created(location)
+          .body(taskBodyResDto);
+    }
+
     /*Create one o more tasks into a list*/
     @Operation(
       summary = "Create Tasks of a list. Token is required.",
@@ -46,7 +77,7 @@ public class TaskController {
       @ApiResponse(responseCode = "403", description = "Forbidden access to this resource", content = {@Content}),
       @ApiResponse(responseCode = "404", description = "User Not Found.\t\n\n List of Tasks Not Found.\t\n\n List of Tasks received are empty.", content = {@Content})
     })
-    @PostMapping
+    @PostMapping("/list-tasks")
     @Transactional
     public ResponseEntity<TaskResponseDto> createTasks(
       @RequestBody @Valid TaskRequestDto taskRequestDto,

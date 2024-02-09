@@ -28,6 +28,23 @@ public class TaskService {
     private final TokenService tokenService;
     private final UserRepository userRepository;
 
+    public TaskBodyResDto createOneTask(OneTaskRequestDto oneTaskBodyReqDto, HttpServletRequest request) {
+
+        User user = getUserFromDatabase(request);
+
+        ListTasks listTasks = user.getListTasksById(oneTaskBodyReqDto.list_task_id());
+
+        if (listTasks == null)
+            throw new ListTasksNotFoundException(String.format("The list of tasks with id: %d does not exist", oneTaskBodyReqDto.list_task_id()));
+
+        Task task = taskMapper.toEntity(oneTaskBodyReqDto.task());
+
+        listTasks.addTask(task);
+
+        return taskMapper.taskToTaskBodyResDto(taskRepository.save(task));
+
+    }
+
     public TaskResponseDto createTasks(TaskRequestDto taskRequestDto, HttpServletRequest request) {
 
         //Get the user from the database using the token in the request

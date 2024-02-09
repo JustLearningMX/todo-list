@@ -97,22 +97,14 @@ git clone https://github.com/JustLearningMX/todo-list.git
     ```json
     {
         "list_task_id": 1,
-        "tasks": [
+        "tasks":
             {
                 "title": "task 1",
                 "description": "this is the task 1",
                 "expirationDate": "2023-08-20",
                 "state": "PENDING",
                 "priority": "HIGH"
-            },
-            {
-                "title": "task 2",
-                "description": "this is the task 2",
-                "expirationDate": "2023-08-22",
-                "state": "PENDING",
-                "priority": "MEDIUM"
             }
-        ]
     }
     ```
 12. Now, you can update or delete your list of tasks, as well as your tasks with 
