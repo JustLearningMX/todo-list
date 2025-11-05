@@ -1,0 +1,19 @@
+services:
+  server:
+    container_name: todo-list-api
+    build:
+      context: .
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      DB_URL: ${DB_URL}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ISSUER: ${JWT_ISSUER}
+      PORT: ${PORT}
+    restart: always
+
+volumes:
+  mysql-data:
