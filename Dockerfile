@@ -9,15 +9,14 @@ WORKDIR /app
 # Copiamos los archivos del proyecto
 COPY . .
 
-# Construimos el JAR ejecutable de Spring Boot
-RUN gradle bootJar --no-daemon
+# Compilamos el JAR (usando gradle global, no ./gradlew)
+RUN gradle clean bootJar --no-daemon
 
 # ===============================
 # 🚀 Etapa 2: Imagen ligera de ejecución
 # ===============================
 FROM eclipse-temurin:17-jre-jammy AS final
 
-# Crear usuario no privilegiado
 ARG UID=10001
 RUN adduser \
     --disabled-password \
@@ -31,9 +30,12 @@ RUN adduser \
 USER appuser
 WORKDIR /app
 
-# Copiamos el JAR generado
+# Copiamos el JAR desde la etapa anterior
 COPY --from=build /app/build/libs/*.jar app.jar
 
-EXPOSE 8080
+# Puerto configurable
+ENV PORT=8080
+EXPOSE ${PORT}
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT} -jar app.jar"]

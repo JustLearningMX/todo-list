@@ -1,19 +1,12 @@
 services:
   server:
     container_name: todo-list-api
-    build:
-      context: .
+    platform: linux/arm64
+    image: todo-list-api:latest
+    #build:
+    #  context: .
     ports:
       - ${PORT}:${PORT}
-    environment:
-      DB_URL: ${DB_URL}
-      DB_NAME: ${DB_NAME}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_ISSUER: ${JWT_ISSUER}
-      PORT: ${PORT}
+    env_file:
+      - .env.prod
     restart: always
-
-volumes:
-  mysql-data:
